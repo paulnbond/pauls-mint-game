@@ -1,0 +1,1 @@
+﻿[{"x":960,"y":450,"width":40,"height":40,"colour":"#3ed47a","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5"}]

@@ -1,0 +1,15 @@
+﻿[
+{"x":550,"y":100,"width":100,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"950","xMinLimit":"50"},
+
+{"x":700,"y":440,"width":100,"height":10,"colour":"#542437","speed":1.5,"dir":"l","xMaxLimit":"850","xMinLimit":"450"},
+{"x":700,"y":420,"width":10,"height":20,"colour":"#542437","speed":1.5,"dir":"l","xMaxLimit":"760","xMinLimit":"450"},
+{"x":790,"y":420,"width":10,"height":20,"colour":"#542437","speed":1.5,"dir":"l","xMaxLimit":"850","xMinLimit":"540"},
+
+{"x":675,"y":250,"width":125,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"},
+{"x":675,"y":260,"width":10,"height":90,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"},
+{"x":675,"y":350,"width":30,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"},
+{"x":790,"y":260,"width":10,"height":150,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"},
+{"x":760,"y":400,"width":30,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"},
+{"x":760,"y":315,"width":30,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"850","xMinLimit":"140"}
+
+]

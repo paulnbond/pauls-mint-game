@@ -1,0 +1,3 @@
+[
+{"x":50,"y":50,"width":60,"height":20,"color":"#fff","fontSize":20,"textAlign":"start","nav":"1","text":"lvls"}
+]

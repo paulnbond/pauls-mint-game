@@ -1,0 +1,6 @@
+[
+{"x":500,"y":185,"width":570,"height":70,"color":"#fff","fontSize":70,"textAlign":"center","nav":"","text":"Paul's Mint Game"},
+{"x":500,"y":250,"width":75,"height":35,"color":"#ccc","fontSize":35,"textAlign":"center","nav":"start","text":"Start"},
+{"x":500,"y":305,"width":75,"height":35,"color":"#ccc","fontSize":35,"textAlign":"center","nav":"levelsMenu","text":"Levels"},
+{"x":500,"y":360,"width":75,"height":35,"color":"#ccc","fontSize":35,"textAlign":"center","nav":"settingsMenu","text":"Settings"}
+]

@@ -1,0 +1,19 @@
+﻿body{
+	margin:0; padding:0; background:#000;
+}
+
+.pc{
+	margin:0 auto; position:relative;
+}
+
+#gameCanvas{
+	border:1px solid #0f0f0f;
+}
+
+#touchLeft{
+	position:absolute; top:0px;
+}
+
+#touchRight{
+	position:absolute; top:0px;
+}

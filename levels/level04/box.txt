@@ -1,0 +1,5 @@
+﻿[
+{"x":100,"y":450,"width":300,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5"},
+{"x":450,"y":450,"width":100,"height":10,"colour":"#542437","speed":1.5,"dir":"u","xMaxLimit":"95","xMinLimit":"5","yMaxLimit":"450","yMinLimit":"350"},
+{"x":600,"y":350,"width":300,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5"}
+]

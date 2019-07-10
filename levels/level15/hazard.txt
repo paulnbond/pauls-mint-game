@@ -1,0 +1,3 @@
+[{"x":0,"y":490,"width":1000,"height":10,"colour":"#C02942","speed":0,"dir":"r","xMaxLimit":"950","xMinLimit":"50"},
+{"x":410,"y":190,"width":60,"height":10,"colour":"#C02942","speed":0,"dir":"r","xMaxLimit":"950","xMinLimit":"50"},
+{"x":530,"y":190,"width":60,"height":10,"colour":"#C02942","speed":0,"dir":"r","xMaxLimit":"950","xMinLimit":"50"}]

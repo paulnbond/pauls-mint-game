@@ -1,0 +1,8 @@
+﻿[
+{"x":150,"y":450,"width":100,"height":50,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5"},
+{"x":300,"y":450,"width":100,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5"},
+
+{"x":750,"y":410,"width":10,"height":40,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"910","xMinLimit":"750"},
+{"x":750,"y":450,"width":60,"height":10,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"960","xMinLimit":"750"},
+{"x":800,"y":410,"width":10,"height":40,"colour":"#542437","speed":0,"dir":"r","xMaxLimit":"960","xMinLimit":"800"}
+]

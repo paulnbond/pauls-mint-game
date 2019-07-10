@@ -1,0 +1,1 @@
+{"x":175,"y":400,"width":10,"height":10,"speed":3,"velX":0,"velY":0,"jumping":false,"grounded":false,"colour":"#ECD078"}

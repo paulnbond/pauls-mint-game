@@ -1,0 +1,1 @@
+[{"x":885,"y":340,"width":10,"height":10,"colour":"#FFFFFF","speed":0,"dir":"r","xMaxLimit":"95","xMinLimit":"5","value":100}]
