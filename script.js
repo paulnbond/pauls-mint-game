@@ -9,7 +9,7 @@ var htmlElements = {
 	ctx 				: this.canvas.getContext("2d"),
 	leftTouchContainer 	: document.getElementById("touchLeft"),
 	rightTouchContainer : document.getElementById("touchRight"),
-	pageContainer 		: document.getElementById("pc");
+	pageContainer 		: document.getElementById("pc")
 };	
 
 var globalSettings = {
