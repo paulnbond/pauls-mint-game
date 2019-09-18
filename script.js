@@ -6,7 +6,7 @@
 //HTML element mappings
 var htmlElements = {
 	canvas 				: document.getElementById("gameCanvas"),
-	ctx 				: this.canvas.getContext("2d"),
+	ctx 				: document.getElementById("gameCanvas").getContext("2d"),
 	leftTouchContainer 	: document.getElementById("touchLeft"),
 	rightTouchContainer : document.getElementById("touchRight"),
 	pageContainer 		: document.getElementById("pc")
