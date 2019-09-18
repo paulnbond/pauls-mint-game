@@ -1,10 +1,16 @@
-﻿(function () {
+(function () {
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
+//HTML element mappings
+var htmlElements = {
+	canvas 				: document.getElementById("gameCanvas"),
+	ctx 				: this.canvas.getContext("2d"),
+	leftTouchContainer 	: document.getElementById("touchLeft"),
+	rightTouchContainer : document.getElementById("touchRight"),
+	pageContainer 		: document.getElementById("pc");
+};	
 
 var globalSettings = {
 	width 			: 1000,
@@ -46,13 +52,14 @@ var game = {
 	bonusTimer		: 0,
 	resetBonus		: false
 };
+
 var player = [], keys = [], boxes = [], goals = [], hazards = [], bonus = [];
 
-function Scale(prop){
+function scale(prop){
 	return prop*globalSettings.scale;
 }
 
-function ScaleCanvas(){
+function scaleCanvas(){
 	//work out scale
 	globalSettings.scale = window.innerWidth / 1000;
 	
@@ -63,43 +70,43 @@ function ScaleCanvas(){
 	if (globalSettings.scale > 1){
 		globalSettings.scale = 1;
 	}
-	globalSettings.width = Scale(globalSettings.defaultWidth);
-	globalSettings.height = Scale(globalSettings.defaultHeight);
-	//game.friction = Scale(game.friction); //DONT NEED TO SCALE game.friction
-	game.gravity = Scale(game.defaultGravity);
+	globalSettings.width = scale(globalSettings.defaultWidth);
+	globalSettings.height = scale(globalSettings.defaultHeight);
+	//game.friction = scale(game.friction); //DONT NEED TO SCALE game.friction
+	game.gravity = scale(game.defaultGravity);
 	
 	//set canvas and touch input to game size
-	canvas.width = globalSettings.width;
-	canvas.height = globalSettings.height;
-	document.getElementById("touchLeft").style.width = globalSettings.width/2+"px";
-	document.getElementById("touchLeft").style.height = globalSettings.height+"px";
-	document.getElementById("touchRight").style.width = globalSettings.width/2+"px";
-	document.getElementById("touchRight").style.left = globalSettings.width/2+"px";
-	document.getElementById("touchRight").style.height = globalSettings.height+"px";
-	document.getElementById("pc").style.width = globalSettings.width+"px";
-	document.getElementById("pc").style.marginTop = ((window.innerHeight-globalSettings.height)/2)+"px";
+	htmlElements.canvas.width = globalSettings.width;
+	htmlElements.canvas.height = globalSettings.height;
+	htmlElements.leftTouchContainer.style.width = globalSettings.width/2+"px";
+	htmlElements.leftTouchContainer.style.height = globalSettings.height+"px";
+	htmlElements.rightTouchContainer.style.width = globalSettings.width/2+"px";
+	htmlElements.rightTouchContainer.style.left = globalSettings.width/2+"px";
+	htmlElements.rightTouchContainer.style.height = globalSettings.height+"px";
+	htmlElements.pageContainer.style.width = globalSettings.width+"px";
+	htmlElements.pageContainer.style.marginTop = ((window.innerHeight-globalSettings.height)/2)+"px";
 }
 
-function ScaleObjects(ob){
+function scaleObjects(ob){
 	for (var i = 0; i < ob.length; i++){
-		ob[i].x = Scale(ob[i].x);
-		ob[i].y = Scale(ob[i].y);
-		ob[i].width = Scale(ob[i].width);
-		ob[i].height = Scale(ob[i].height);
-		ob[i].speed = Scale(ob[i].speed);
-		ob[i].xMaxLimit = Scale(ob[i].xMaxLimit);
-		ob[i].xMinLimit = Scale(ob[i].xMinLimit);
-		ob[i].yMaxLimit = Scale(ob[i].yMaxLimit);
-		ob[i].yMinLimit = Scale(ob[i].yMinLimit);
+		ob[i].x = scale(ob[i].x);
+		ob[i].y = scale(ob[i].y);
+		ob[i].width = scale(ob[i].width);
+		ob[i].height = scale(ob[i].height);
+		ob[i].speed = scale(ob[i].speed);
+		ob[i].xMaxLimit = scale(ob[i].xMaxLimit);
+		ob[i].xMinLimit = scale(ob[i].xMinLimit);
+		ob[i].yMaxLimit = scale(ob[i].yMaxLimit);
+		ob[i].yMinLimit = scale(ob[i].yMinLimit);
 	}
 }
 
-function ScalePlayer(pl){
-	pl.x = Scale(pl.x);
-	pl.y = Scale(pl.y);
-	pl.width = Scale(pl.width);
-	pl.height = Scale(pl.height);
-	pl.speed = Scale(pl.speed);
+function scalePlayer(pl){
+	pl.x = scale(pl.x);
+	pl.y = scale(pl.y);
+	pl.width = scale(pl.width);
+	pl.height = scale(pl.height);
+	pl.speed = scale(pl.speed);
 }
 
 function updateMenu(){
@@ -108,10 +115,10 @@ function updateMenu(){
 	switch(menu.currentType){
 		case "main":
 			for (var i = 0; i < menu.mainItems.length; i++) {
-				ctx.font = Scale(menu.mainItems[i].fontSize)+"px Arial";
-				ctx.fillStyle = menu.mainItems[i].color;
-				ctx.textAlign = menu.mainItems[i].textAlign;
-				ctx.fillText(menu.mainItems[i].text, Scale(menu.mainItems[i].x), Scale(menu.mainItems[i].y));
+				htmlElements.ctx.font = scale(menu.mainItems[i].fontSize)+"px Arial";
+				htmlElements.ctx.fillStyle = menu.mainItems[i].color;
+				htmlElements.ctx.textAlign = menu.mainItems[i].textAlign;
+				htmlElements.ctx.fillText(menu.mainItems[i].text, scale(menu.mainItems[i].x), scale(menu.mainItems[i].y));
 			}
 			break;
 
@@ -121,16 +128,16 @@ function updateMenu(){
 					for (var j = 1; j <= game.maxLevel; j++){
 						var curLvl = (j < 10) ? "0"+j : j;
 						var lvlColor = (game.completedLvls.indexOf(j) > -1) ? "#3ed47a" : menu.levelItems[i].color;
-						ctx.font = Scale(menu.levelItems[i].fontSize)+"px Arial";
-						ctx.fillStyle = lvlColor;
-						ctx.textAlign = menu.levelItems[i].textAlign;
-						ctx.fillText("Lvl "+curLvl, Scale(menu.lvlPositions[j-1][0]), Scale(menu.lvlPositions[j-1][1]));
+						htmlElements.ctx.font = scale(menu.levelItems[i].fontSize)+"px Arial";
+						htmlElements.ctx.fillStyle = lvlColor;
+						htmlElements.ctx.textAlign = menu.levelItems[i].textAlign;
+						htmlElements.ctx.fillText("Lvl "+curLvl, scale(menu.lvlPositions[j-1][0]), scale(menu.lvlPositions[j-1][1]));
 					}
 				} else {
-					ctx.font = Scale(menu.levelItems[i].fontSize)+"px Arial";
-					ctx.fillStyle = menu.levelItems[i].color;
-					ctx.textAlign = menu.levelItems[i].textAlign;
-					ctx.fillText(menu.levelItems[i].text, Scale(menu.levelItems[i].x), Scale(menu.levelItems[i].y));
+					htmlElements.ctx.font = scale(menu.levelItems[i].fontSize)+"px Arial";
+					htmlElements.ctx.fillStyle = menu.levelItems[i].color;
+					htmlElements.ctx.textAlign = menu.levelItems[i].textAlign;
+					htmlElements.ctx.fillText(menu.levelItems[i].text, scale(menu.levelItems[i].x), scale(menu.levelItems[i].y));
 				}
 			}
 			break;
@@ -176,18 +183,18 @@ function updateGame(){
 ///////////////////////////////////////////////////// draw objects ////////////////////////////////////////////////////////
 	clearCanvas();
     //Level number background
-	ctx.font = Scale(550)+"px Arial";
-	ctx.fillStyle = "#0f0f0f";
-	ctx.textAlign="center";
-	ctx.fillText(game.currentLevel, globalSettings.width/2, Scale(430));
+	htmlElements.ctx.font = scale(550)+"px Arial";
+	htmlElements.ctx.fillStyle = "#0f0f0f";
+	htmlElements.ctx.textAlign="center";
+	htmlElements.ctx.fillText(game.currentLevel, globalSettings.width/2, scale(430));
  
     player.grounded = false;
     for (var i = 0; i < boxes.length; i++) {
-    	ctx.fillStyle = boxes[i].colour;
-        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
-        //ctx.drawImage(img, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+    	htmlElements.ctx.fillStyle = boxes[i].colour;
+        htmlElements.ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+        //htmlElements.ctx.drawImage(img, boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
  		
- 		MoveObject(boxes[i]);
+ 		moveObject(boxes[i]);
  		
         var dir = colCheck(player, boxes[i]);
  		
@@ -207,7 +214,7 @@ function updateGame(){
         } else if (dir === "b") {
             //player.grounded = true;
             //player.jumping = false;
-            Jump();
+            jump();
             game.bounces++;
         } else if (dir === "t") {
             player.velY *= -1;
@@ -215,10 +222,10 @@ function updateGame(){
     }
     
     for (var i = 0; i < hazards.length; i++) {
-    	ctx.fillStyle = hazards[i].colour;
-        ctx.fillRect(hazards[i].x, hazards[i].y, hazards[i].width, hazards[i].height);
+    	htmlElements.ctx.fillStyle = hazards[i].colour;
+        htmlElements.ctx.fillRect(hazards[i].x, hazards[i].y, hazards[i].width, hazards[i].height);
  		
- 		MoveObject(hazards[i]);
+ 		moveObject(hazards[i]);
  		
         var dir = colCheck(player, hazards[i]);
  		
@@ -226,19 +233,19 @@ function updateGame(){
  			if (game.active){
 	 			//dead
 	 			game.active = false;
-	 			ctx.clearRect(0, 0, globalSettings.width, globalSettings.height);
+	 			htmlElements.ctx.clearRect(0, 0, globalSettings.width, globalSettings.height);
 	 			game.death++;
 	 			game.points -= game.levelBonus;
-	 			LoadLevel(game.currentLevel);
+	 			loadLevel(game.currentLevel);
  			}
  		}
     }
     
     for (var i = 0; i < goals.length; i++){
-    	ctx.fillStyle = goals[i].colour;
-    	ctx.fillRect(goals[i].x, goals[i].y, goals[i].width, goals[i].height);
+    	htmlElements.ctx.fillStyle = goals[i].colour;
+    	htmlElements.ctx.fillRect(goals[i].x, goals[i].y, goals[i].width, goals[i].height);
     	
-    	MoveObject(goals[i]);
+    	moveObject(goals[i]);
     	
     	var dir = colCheck(player, goals[i]);
     	
@@ -246,16 +253,16 @@ function updateGame(){
     		if (game.active){
 				game.death = 0;
 				game.completedLvls.push(game.currentLevel);
-				LoadMenu("levels");
+				loadMenu("levels");
     		}
     	}
     }
     
     for (var i = 0; i < bonus.length; i++){
-    	ctx.fillStyle = bonus[i].colour;
-    	ctx.fillRect(bonus[i].x, bonus[i].y, bonus[i].width, bonus[i].height);
+    	htmlElements.ctx.fillStyle = bonus[i].colour;
+    	htmlElements.ctx.fillRect(bonus[i].x, bonus[i].y, bonus[i].width, bonus[i].height);
     	
-    	MoveObject(bonus[i]);
+    	moveObject(bonus[i]);
     	
     	var dir = colCheck(player, bonus[i]);
     	
@@ -266,7 +273,7 @@ function updateGame(){
 			game.levelBonus += bonus[i].value;
 			
 			game.resetBonus = false;
-			GravityBonus();
+			gravityBonus();
     	}
     }
     
@@ -276,30 +283,30 @@ function updateGame(){
          player.velY = 0;
     }
     
-    SetTail();
+    setTail();
     
     player.x += player.velX;
 	player.y += player.velY;	
  
-    ctx.fillStyle = player.colour;
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    htmlElements.ctx.fillStyle = player.colour;
+    htmlElements.ctx.fillRect(player.x, player.y, player.width, player.height);
     
-    DrawTail();
+    drawTail();
     
 ///////////////////////////////////////////////////// Draw game text //////////////////////////////////////////////////////
-	ctx.font = Scale(20)+"px Arial";
-	ctx.fillStyle = "#fff";
-	ctx.textAlign = "start";
-	//ctx.fillText("Points: "+game.points, Scale(10), Scale(30));
-	ctx.fillText("Bounces: "+game.bounces, Scale(10), Scale(55));
-	ctx.fillText("Deaths: "+game.death, Scale(10), Scale(80));
+	htmlElements.ctx.font = scale(20)+"px Arial";
+	htmlElements.ctx.fillStyle = "#fff";
+	htmlElements.ctx.textAlign = "start";
+	//htmlElements.ctx.fillText("Points: "+game.points, scale(10), scale(30));
+	htmlElements.ctx.fillText("Bounces: "+game.bounces, scale(10), scale(55));
+	htmlElements.ctx.fillText("Deaths: "+game.death, scale(10), scale(80));
 
 ///////////////////////////////////////////////////// Draw Bonus Timer ////////////////////////////////////////////////////
 	if (game.bonusTimer > 0){
-		ctx.font = Scale(20)+"px Arial";
-		ctx.fillStyle = "#fff";
-		ctx.textAlign = "start";
-		ctx.fillText(game.bonusTimer, (player.x), (player.y - 10));
+		htmlElements.ctx.font = scale(20)+"px Arial";
+		htmlElements.ctx.fillStyle = "#fff";
+		htmlElements.ctx.textAlign = "start";
+		htmlElements.ctx.fillText(game.bonusTimer, (player.x), (player.y - 10));
 	}
 ///////////////////////////////////////////////////// Update Game /////////////////////////////////////////////////////////
 	if (game.active){
@@ -308,13 +315,13 @@ function updateGame(){
 }
 
 function clearCanvas(){
-	ctx.clearRect(0, 0, globalSettings.width, globalSettings.height);
+	htmlElements.ctx.clearRect(0, 0, globalSettings.width, globalSettings.height);
     //draw background colour
-    ctx.fillStyle = "#000";
-	ctx.fillRect(0, 0, globalSettings.width, globalSettings.height);
+    htmlElements.ctx.fillStyle = "#000";
+	htmlElements.ctx.fillRect(0, 0, globalSettings.width, globalSettings.height);
 }
 
-function MoveObject(Ob){
+function moveObject(Ob){
 	if (Ob.dir === "r"){
 		Ob.x += Ob.speed;
 		if (Ob.x >= (Ob.xMaxLimit - Ob.width)){
@@ -338,7 +345,7 @@ function MoveObject(Ob){
 	}
 }
 
-function Jump(){
+function jump(){
 	player.jumping = true;
     player.grounded = false;
     player.velY = -player.speed * 2;
@@ -379,7 +386,7 @@ function colCheck(shapeA, shapeB) {
     return colDir;
 }
 
-function SetTail(){
+function setTail(){
 	
 	player.prevX6 = player.prevX5;
     player.prevX5 = player.prevX4;
@@ -396,42 +403,42 @@ function SetTail(){
 	player.prevY1 = player.y;
 }
 
-function DrawTail(){
-	ctx.fillStyle = "rgba(236,208,120,0.2)";
-    ctx.fillRect(player.prevX1 + ((player.width-(player.width*0.9))/2), player.prevY1 + ((player.height-(player.height*0.9))/2), player.width*0.9, player.height*0.9);
-    ctx.fillRect(player.prevX2 + ((player.width-(player.width*0.8))/2), player.prevY2 + ((player.height-(player.height*0.8))/2), player.width*0.8, player.height*0.8);
-    ctx.fillRect(player.prevX3 + ((player.width-(player.width*0.7))/2), player.prevY3 + ((player.height-(player.height*0.7))/2), player.width*0.7, player.height*0.7);
-    ctx.fillRect(player.prevX4 + ((player.width-(player.width*0.6))/2), player.prevY4 + ((player.height-(player.height*0.6))/2), player.width*0.6, player.height*0.6);
-	ctx.fillRect(player.prevX5 + ((player.width-(player.width*0.5))/2), player.prevY5 + ((player.height-(player.height*0.5))/2), player.width*0.5, player.height*0.5);
-	ctx.fillRect(player.prevX6 + ((player.width-(player.width*0.4))/2), player.prevY6 + ((player.height-(player.height*0.4))/2), player.width*0.4, player.height*0.4);
+function drawTail(){
+	htmlElements.ctx.fillStyle = "rgba(236,208,120,0.2)";
+    htmlElements.ctx.fillRect(player.prevX1 + ((player.width-(player.width*0.9))/2), player.prevY1 + ((player.height-(player.height*0.9))/2), player.width*0.9, player.height*0.9);
+    htmlElements.ctx.fillRect(player.prevX2 + ((player.width-(player.width*0.8))/2), player.prevY2 + ((player.height-(player.height*0.8))/2), player.width*0.8, player.height*0.8);
+    htmlElements.ctx.fillRect(player.prevX3 + ((player.width-(player.width*0.7))/2), player.prevY3 + ((player.height-(player.height*0.7))/2), player.width*0.7, player.height*0.7);
+    htmlElements.ctx.fillRect(player.prevX4 + ((player.width-(player.width*0.6))/2), player.prevY4 + ((player.height-(player.height*0.6))/2), player.width*0.6, player.height*0.6);
+	htmlElements.ctx.fillRect(player.prevX5 + ((player.width-(player.width*0.5))/2), player.prevY5 + ((player.height-(player.height*0.5))/2), player.width*0.5, player.height*0.5);
+	htmlElements.ctx.fillRect(player.prevX6 + ((player.width-(player.width*0.4))/2), player.prevY6 + ((player.height-(player.height*0.4))/2), player.width*0.4, player.height*0.4);
 }
 
-function GravityBonus(timer){
+function gravityBonus(timer){
 	timer = (typeof timer !== 'undefined') ?  timer : 5;
 	if (!game.resetBonus){
 		game.bonusTimer = timer;
 		if (timer > 0){
-			game.gravity = Scale(game.defaultGravity/4);
+			game.gravity = scale(game.defaultGravity/4);
 			window.setTimeout(function(){
-				GravityBonus(timer-1);
+				gravityBonus(timer-1);
 			}, 1000);
 		} else {
-			ResetBonus();
+			resetBonus();
 		}
 	}
 }
 
-function ResetBonus(){
+function resetBonus(){
 	game.bonusTimer = 0;
-	game.gravity = Scale(game.defaultGravity);
+	game.gravity = scale(game.defaultGravity);
 	game.resetBonus = true;
 }
 
-function LoadMenu(menuType){
+function loadMenu(menuType){
 	menu.active = true;
 	game.active = false;
 	globalSettings.state = "menu";
-	ToggleTouchInputs(false);
+	toggleTouchInputs(false);
 	menu.currentType = menuType;
 
 	var cache = new Date().getTime();
@@ -467,54 +474,54 @@ function LoadMenu(menuType){
 	menuReq.send();
 }
 
-function StartGame(){
+function startGame(){
 	menu.active = false;
 	globalSettings.state = "game";
-	ToggleTouchInputs(true);
-	LoadLevel(game.currentLevel);
+	toggleTouchInputs(true);
+	loadLevel(game.currentLevel);
 }
 
-function ToggleTouchInputs(show){
-	document.getElementById("touchLeft").style.display = document.getElementById("touchRight").style.display = (show) ? "block" : "none";
+function toggleTouchInputs(show){
+	htmlElements.leftTouchContainer.style.display = htmlElements.rightTouchContainer.style.display = (show) ? "block" : "none";
 }
 
-function LoadLevel(lvl){
+function loadLevel(lvl){
 	console.log("Loading level: "+lvl);
 	lvl = (lvl < 10) ? "0"+lvl : lvl;
 	game.levelBonus = 0;
 	game.bounces = 0;
-	ResetBonus();
+	resetBonus();
 	var cache = new Date().getTime();
 	var boxReq = new XMLHttpRequest();
 	var url = "levels/level"+lvl+"/box.txt?cache="+cache;
 	boxReq.onreadystatechange = function() {
 		if (boxReq.readyState == 4 && boxReq.status == 200) {
 			boxes = JSON.parse(boxReq.responseText);
-			ScaleObjects(boxes);
+			scaleObjects(boxes);
 			var goalReq = new XMLHttpRequest();
 			url = "levels/level"+lvl+"/goal.txt?cache="+cache;
 			goalReq.onreadystatechange = function() {
 				if (goalReq.readyState == 4 && goalReq.status == 200) {
 					goals = JSON.parse(goalReq.responseText);
-					ScaleObjects(goals);
+					scaleObjects(goals);
 					var hazardReq = new XMLHttpRequest();
 					url = "levels/level"+lvl+"/hazard.txt?cache="+cache;
 					hazardReq.onreadystatechange = function() {
 						if (hazardReq.readyState == 4 && hazardReq.status == 200) {
 							hazards = JSON.parse(hazardReq.responseText);
-							ScaleObjects(hazards);
+							scaleObjects(hazards);
 							var playerReq = new XMLHttpRequest();
 							url = "levels/level"+lvl+"/player.txt?cache="+cache;
 							playerReq.onreadystatechange = function() {
 								if (playerReq.readyState == 4 && playerReq.status == 200) {
 									player = JSON.parse(playerReq.responseText);
-									ScalePlayer(player);
+									scalePlayer(player);
 									var bonusReq = new XMLHttpRequest();
 									url = "levels/level"+lvl+"/bonus.txt?cache="+cache;
 									bonusReq.onreadystatechange = function() {
 										if (bonusReq.readyState == 4 && bonusReq.status == 200) {
 											bonus = JSON.parse(bonusReq.responseText);
-											ScaleObjects(bonus);
+											scaleObjects(bonus);
 											if (!game.active){
 												game.active = true;
 												updateGame();
@@ -541,7 +548,7 @@ function LoadLevel(lvl){
 	boxReq.send();
 }
 
-function ResetGame(){
+function resetGame(){
 	game.currentLevel = 1;
 	game.death = 0;
 	game.bounces = 0;
@@ -562,26 +569,26 @@ function isInside(pos, rect){
 
 function canvasTouch(e){
 	if (menu.active){
-		var mousePos = getMousePos(canvas, e);
+		var mousePos = getMousePos(htmlElements.canvas, e);
 		
 		switch(menu.currentType){
 			case "main":
 				for (var i = 0; i < menu.mainItems.length; i++) {
 					var xPos = (menu.mainItems[i].textAlign === "start") ? menu.mainItems[i].x : (menu.mainItems[i].x - (menu.mainItems[i].width/2));
 					var rect = {
-						x:		Scale(xPos),
-						y:		Scale(menu.mainItems[i].y - menu.mainItems[i].height),
-						width:	Scale(menu.mainItems[i].width),
-						height:	Scale(menu.mainItems[i].height)
+						x:		scale(xPos),
+						y:		scale(menu.mainItems[i].y - menu.mainItems[i].height),
+						width:	scale(menu.mainItems[i].width),
+						height:	scale(menu.mainItems[i].height)
 					};
 					if (isInside(mousePos,rect)) {
 						switch (menu.mainItems[i].nav){
 							case "start":
 								game.currentLevel = 1;
-								StartGame();
+								startGame();
 								break;
 							case "levelsMenu":
-								LoadMenu("levels");
+								loadMenu("levels");
 								break;
 							case "settingsMenu":
 								break;
@@ -596,15 +603,15 @@ function canvasTouch(e){
 						for (var j = 1; j <= game.maxLevel; j++){
 							var xPos = (menu.levelItems[i].textAlign === "start") ? menu.lvlPositions[j-1][0] : (menu.lvlPositions[j-1][0] - (menu.levelItems[i].width/2));
 							var rect = {
-								x:		Scale(xPos),
-								y:		Scale(menu.lvlPositions[j-1][1] - menu.levelItems[i].height),
-								width:	Scale(menu.levelItems[i].width),
-								height:	Scale(menu.levelItems[i].height)
+								x:		scale(xPos),
+								y:		scale(menu.lvlPositions[j-1][1] - menu.levelItems[i].height),
+								width:	scale(menu.levelItems[i].width),
+								height:	scale(menu.levelItems[i].height)
 							};
 							console.dir(rect);
 							if (isInside(mousePos,rect)) {
 								game.currentLevel = j;
-								StartGame();
+								startGame();
 							}
 						}
 					}
@@ -624,31 +631,31 @@ document.body.addEventListener("keydown", function (e) {
 document.body.addEventListener("keyup", function (e) {
     keys[e.keyCode] = false;
 });
-document.getElementById("touchLeft").addEventListener("touchstart", function(e){
+htmlElements.leftTouchContainer.addEventListener("touchstart", function(e){
 	keys[37] = true;
 });
-document.getElementById("touchLeft").addEventListener("touchend", function(e){
+htmlElements.leftTouchContainer.addEventListener("touchend", function(e){
 	keys[37] = false;
 });
-document.getElementById("touchRight").addEventListener("touchstart", function(e){
+htmlElements.rightTouchContainer.addEventListener("touchstart", function(e){
 	keys[39] = true;
 });
-document.getElementById("touchRight").addEventListener("touchend", function(e){
+htmlElements.rightTouchContainer.addEventListener("touchend", function(e){
 	keys[39] = false;
 });
 window.addEventListener("resize", function(e){
-	ScaleCanvas();
+	scaleCanvas();
 	if(game.active){
-		StartGame();
+		startGame();
 	}
 }); 
 window.addEventListener("load", function () {
-	ScaleCanvas();
-	LoadMenu("main");
+	scaleCanvas();
+	loadMenu("main");
 });
-canvas.addEventListener("click", function(e){
+htmlElements.canvas.addEventListener("click", function(e){
 	canvasTouch(e);
 }, false);
-canvas.addEventListener("touchend", function(e){
+htmlElements.canvas.addEventListener("touchend", function(e){
 	canvasTouch(e);
 }, false);
