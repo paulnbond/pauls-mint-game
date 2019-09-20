@@ -1,0 +1,13 @@
+[
+    {
+        "x":100,
+        "y":200,
+        "width":100,
+        "height":20,
+        "colour":"#bbb",
+        "speed":0,
+        "dir":"r",
+        "xMaxLimit":"95",
+        "xMinLimit":"5"
+    }
+]

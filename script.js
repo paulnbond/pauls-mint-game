@@ -53,7 +53,7 @@ var game = {
 	resetBonus		: false
 };
 
-var player = [], keys = [], boxes = [], goals = [], hazards = [], bonus = [];
+var player = [], keys = [], ghosts = [], boxes = [], goals = [], hazards = [], bonus = [];
 
 function scale(prop){
 	return prop*globalSettings.scale;
@@ -188,7 +188,13 @@ function updateGame(){
 	htmlElements.ctx.textAlign="center";
 	htmlElements.ctx.fillText(game.currentLevel, globalSettings.width/2, scale(430));
  
-    player.grounded = false;
+	player.grounded = false;
+	for (var i = 0; i < ghosts.length; i++) {
+    	htmlElements.ctx.fillStyle = ghosts[i].colour;
+        htmlElements.ctx.fillRect(ghosts[i].x, ghosts[i].y, ghosts[i].width, ghosts[i].height);
+ 		moveObject(ghosts[i]);
+    }
+
     for (var i = 0; i < boxes.length; i++) {
     	htmlElements.ctx.fillStyle = boxes[i].colour;
         htmlElements.ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
@@ -492,60 +498,68 @@ function loadLevel(lvl){
 	game.bounces = 0;
 	resetBonus();
 	var cache = new Date().getTime();
-	var boxReq = new XMLHttpRequest();
-	var url = "levels/level"+lvl+"/box.json?cache="+cache;
-	boxReq.onreadystatechange = function() {
-		if (boxReq.readyState == 4 && boxReq.status == 200) {
-			boxes = JSON.parse(boxReq.responseText);
-			scaleObjects(boxes);
-			var goalReq = new XMLHttpRequest();
-			url = "levels/level"+lvl+"/goal.json?cache="+cache;
-			goalReq.onreadystatechange = function() {
-				if (goalReq.readyState == 4 && goalReq.status == 200) {
-					goals = JSON.parse(goalReq.responseText);
-					scaleObjects(goals);
-					var hazardReq = new XMLHttpRequest();
-					url = "levels/level"+lvl+"/hazard.json?cache="+cache;
-					hazardReq.onreadystatechange = function() {
-						if (hazardReq.readyState == 4 && hazardReq.status == 200) {
-							hazards = JSON.parse(hazardReq.responseText);
-							scaleObjects(hazards);
-							var playerReq = new XMLHttpRequest();
-							url = "levels/level"+lvl+"/player.json?cache="+cache;
-							playerReq.onreadystatechange = function() {
-								if (playerReq.readyState == 4 && playerReq.status == 200) {
-									player = JSON.parse(playerReq.responseText);
-									scalePlayer(player);
-									var bonusReq = new XMLHttpRequest();
-									url = "levels/level"+lvl+"/bonus.json?cache="+cache;
-									bonusReq.onreadystatechange = function() {
-										if (bonusReq.readyState == 4 && bonusReq.status == 200) {
-											bonus = JSON.parse(bonusReq.responseText);
-											scaleObjects(bonus);
-											if (!game.active){
-												game.active = true;
-												updateGame();
-											}
+	var ghostReq = new XMLHttpRequest();
+	var url = "levels/level"+lvl+"/ghosts.json?cache="+cache;
+	ghostReq.onreadystatechange = function() {
+		if (ghostReq.readyState == 4 && ghostReq.status == 200) {
+			ghosts = JSON.parse(ghostReq.responseText);
+			scaleObjects(ghosts);
+			var boxReq = new XMLHttpRequest();
+			url = "levels/level"+lvl+"/box.json?cache="+cache;
+			boxReq.onreadystatechange = function() {
+				if (boxReq.readyState == 4 && boxReq.status == 200) {
+					boxes = JSON.parse(boxReq.responseText);
+					scaleObjects(boxes);
+					var goalReq = new XMLHttpRequest();
+					url = "levels/level"+lvl+"/goal.json?cache="+cache;
+					goalReq.onreadystatechange = function() {
+						if (goalReq.readyState == 4 && goalReq.status == 200) {
+							goals = JSON.parse(goalReq.responseText);
+							scaleObjects(goals);
+							var hazardReq = new XMLHttpRequest();
+							url = "levels/level"+lvl+"/hazard.json?cache="+cache;
+							hazardReq.onreadystatechange = function() {
+								if (hazardReq.readyState == 4 && hazardReq.status == 200) {
+									hazards = JSON.parse(hazardReq.responseText);
+									scaleObjects(hazards);
+									var playerReq = new XMLHttpRequest();
+									url = "levels/level"+lvl+"/player.json?cache="+cache;
+									playerReq.onreadystatechange = function() {
+										if (playerReq.readyState == 4 && playerReq.status == 200) {
+											player = JSON.parse(playerReq.responseText);
+											scalePlayer(player);
+											var bonusReq = new XMLHttpRequest();
+											url = "levels/level"+lvl+"/bonus.json?cache="+cache;
+											bonusReq.onreadystatechange = function() {
+												if (bonusReq.readyState == 4 && bonusReq.status == 200) {
+													bonus = JSON.parse(bonusReq.responseText);
+													scaleObjects(bonus);
+													if (!game.active){
+														game.active = true;
+														updateGame();
+													}
+												}
+											};
+											bonusReq.open("GET", url, true);
+											bonusReq.send();
 										}
 									};
-									bonusReq.open("GET", url, true);
-									bonusReq.send();
+									playerReq.open("GET", url, true);
+									playerReq.send();
 								}
 							};
-							playerReq.open("GET", url, true);
-							playerReq.send();
+							hazardReq.open("GET", url, true);
+							hazardReq.send();
 						}
 					};
-					hazardReq.open("GET", url, true);
-					hazardReq.send();
+					goalReq.open("GET", url, true);
+					goalReq.send();
 				}
 			};
-			goalReq.open("GET", url, true);
-			goalReq.send();
+			boxReq.open("GET", url, true);
+			boxReq.send();
 		}
 	};
-	boxReq.open("GET", url, true);
-	boxReq.send();
 }
 
 function resetGame(){
