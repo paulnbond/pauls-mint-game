@@ -1,0 +1,19 @@
+{
+  "name": "pauls-mint-game",
+  "version": "1.0.0",
+  "description": "A fun bouncy ball platformer",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulnbond/pauls-mint-game.git"
+  },
+  "author": "Paul Bond",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paulnbond/pauls-mint-game/issues"
+  },
+  "homepage": "https://github.com/paulnbond/pauls-mint-game#readme"
+}

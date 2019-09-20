@@ -184,7 +184,7 @@ function updateGame(){
 	clearCanvas();
     //Level number background
 	htmlElements.ctx.font = scale(550)+"px Arial";
-	htmlElements.ctx.fillStyle = "#0f0f0f";
+	htmlElements.ctx.fillStyle = "#303030";
 	htmlElements.ctx.textAlign="center";
 	htmlElements.ctx.fillText(game.currentLevel, globalSettings.width/2, scale(430));
  
