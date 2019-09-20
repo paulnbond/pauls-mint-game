@@ -443,19 +443,19 @@ function loadMenu(menuType){
 
 	var cache = new Date().getTime();
 	var menuReq = new XMLHttpRequest();
-	var url = "menus/main/items.txt?cache="+cache;
+	var url = "menus/main/items.json?cache="+cache;
 	menuReq.onreadystatechange = function() {
 		if (menuReq.readyState == 4 && menuReq.status == 200) {
 			menu.mainItems = JSON.parse(menuReq.responseText);
 			
 			var menuLevelsReq = new XMLHttpRequest();
-			url = "menus/levels/items.txt?cache="+cache;
+			url = "menus/levels/items.json?cache="+cache;
 			menuLevelsReq.onreadystatechange = function(){
 				if (menuLevelsReq.readyState == 4 && menuLevelsReq.status == 200) {
 					menu.levelItems = JSON.parse(menuLevelsReq.responseText);
 
 					var menuSettingsReq = new XMLHttpRequest();
-					url = "menus/settings/items.txt?cache="+cache;
+					url = "menus/settings/items.json?cache="+cache;
 					menuSettingsReq.onreadystatechange = function(){
 						if (menuSettingsReq.readyState == 4 && menuSettingsReq.status == 200) {
 							menu.settingsItems = JSON.parse(menuSettingsReq.responseText);
@@ -493,31 +493,31 @@ function loadLevel(lvl){
 	resetBonus();
 	var cache = new Date().getTime();
 	var boxReq = new XMLHttpRequest();
-	var url = "levels/level"+lvl+"/box.txt?cache="+cache;
+	var url = "levels/level"+lvl+"/box.json?cache="+cache;
 	boxReq.onreadystatechange = function() {
 		if (boxReq.readyState == 4 && boxReq.status == 200) {
 			boxes = JSON.parse(boxReq.responseText);
 			scaleObjects(boxes);
 			var goalReq = new XMLHttpRequest();
-			url = "levels/level"+lvl+"/goal.txt?cache="+cache;
+			url = "levels/level"+lvl+"/goal.json?cache="+cache;
 			goalReq.onreadystatechange = function() {
 				if (goalReq.readyState == 4 && goalReq.status == 200) {
 					goals = JSON.parse(goalReq.responseText);
 					scaleObjects(goals);
 					var hazardReq = new XMLHttpRequest();
-					url = "levels/level"+lvl+"/hazard.txt?cache="+cache;
+					url = "levels/level"+lvl+"/hazard.json?cache="+cache;
 					hazardReq.onreadystatechange = function() {
 						if (hazardReq.readyState == 4 && hazardReq.status == 200) {
 							hazards = JSON.parse(hazardReq.responseText);
 							scaleObjects(hazards);
 							var playerReq = new XMLHttpRequest();
-							url = "levels/level"+lvl+"/player.txt?cache="+cache;
+							url = "levels/level"+lvl+"/player.json?cache="+cache;
 							playerReq.onreadystatechange = function() {
 								if (playerReq.readyState == 4 && playerReq.status == 200) {
 									player = JSON.parse(playerReq.responseText);
 									scalePlayer(player);
 									var bonusReq = new XMLHttpRequest();
-									url = "levels/level"+lvl+"/bonus.txt?cache="+cache;
+									url = "levels/level"+lvl+"/bonus.json?cache="+cache;
 									bonusReq.onreadystatechange = function() {
 										if (bonusReq.readyState == 4 && bonusReq.status == 200) {
 											bonus = JSON.parse(bonusReq.responseText);
