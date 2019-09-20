@@ -560,6 +560,8 @@ function loadLevel(lvl){
 			boxReq.send();
 		}
 	};
+	ghostReq.open("GET", url, true);
+	ghostReq.send();
 }
 
 function resetGame(){
